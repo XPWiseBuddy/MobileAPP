@@ -10,7 +10,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation<any>();
 
-const BASE_URL =
+  const BASE_URL =
     Platform.OS === 'android' ? 'http://10.0.2.2:8085' : 'http://localhost:8085';
 
 
@@ -26,14 +26,30 @@ const BASE_URL =
         password,
       });
 
+
       if (response.status === 200) {
-        Alert.alert('Sucesso', 'Login efetuado com sucesso!');
+        Alert.alert('Sucesso', 'Login realizado com sucesso!');
+        const userName = response.data.name;
+        const userEmail = response.data.email;
+        console.log({
+          'User Name:': userName,
+          'User Email:': userEmail,
+        });
+        await AsyncStorage.setItem('userName', userName);
+        await AsyncStorage.setItem('userEmail', userEmail);
+        // Armazena sessão do usuário no banco pela API
+        await axios.post(`${BASE_URL}/wise-buddy/v1/sessions`, {
+          userName: userName,
+          sessionCompiled: "User logged in",
+          sessionDate: new Date().toISOString(),
+          recommendationId: null
+        });
         navigation.navigate('Main');
       } else {
         Alert.alert('Erro', 'Email ou senha inválidos');
       }
-    } catch (error: any) {
-      console.error(error);
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
       Alert.alert('Erro', 'Falha ao realizar login. Verifique os dados e tente novamente.');
     }
   };
@@ -44,7 +60,7 @@ const BASE_URL =
 
       <TextInput
         placeholder="Email"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={email}
         onChangeText={setEmail}
         style={styles.input}
@@ -54,7 +70,7 @@ const BASE_URL =
 
       <TextInput
         placeholder="Senha"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={password}
         onChangeText={setPassword}
         style={styles.input}
@@ -62,6 +78,7 @@ const BASE_URL =
       />
 
       <Button title="Entrar" onPress={handleLogin} color={colors.primary} />
+      
       <View style={{ marginTop: spacing.medium }}>
         <Button
           title="Registrar"
@@ -84,15 +101,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSizes.large,
-    color: colors.textPrimary,
+    color: colors.text,
     textAlign: 'center',
     marginBottom: spacing.large,
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.textPrimary,
+    borderBottomColor: colors.text,
     marginBottom: spacing.medium,
     height: 40,
-    color: colors.textPrimary,
+    color: colors.textLight,
   },
 });

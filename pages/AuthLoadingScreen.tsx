@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -12,26 +12,22 @@ type RootStackParamList = {
   Main: undefined;
 };
 
+
+const BASE_URL =
+    Platform.OS === 'android' ? 'http://10.0.2.2:8085' : 'http://localhost:8085';
+
 const AuthLoadingScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const checkSession = async () => {
-      const token = await AsyncStorage.getItem('sessionToken');
-      if (token) {
-        // Verifica se o token ainda é válido
-        const response = await fetch('https://api.example.com/wise-buddy/v1/sessions/user/123', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        const userId = await AsyncStorage.getItem('userId');
+        const response = await fetch(`${BASE_URL}/wise-buddy/v1/sessions/user/${userId}`);
         if (response.ok) {
-          navigation.replace('Main'); // Sessão válida
+          navigation.replace('Main');
         } else {
-          navigation.replace('Login'); // Sessão inválida
+          navigation.replace('Login');
         }
-      } else {
-        navigation.replace('Login'); // Sem token
-      }
     };
 
     checkSession();

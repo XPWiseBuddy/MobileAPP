@@ -1,10 +1,9 @@
 export const colors = {
+  background: '#181A20',
+  secondary: '#23272F',
   primary: '#F2B705',
-  secondary: '#BF7E04',
-  background: '#0D0D0D',
-  card: '#353B3B',
-  textPrimary: '#F2F2F2',
-  textSecondary: '#A6A6A6',
+  text: '#F2F2F2',
+  textLight: '#B0B0B0',
 };
 
 export const spacing = {

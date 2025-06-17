@@ -44,7 +44,7 @@ const RegisterScreen = () => {
 
       <TextInput
         placeholder="Nome"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={name}
         onChangeText={setName}
         style={styles.input}
@@ -52,7 +52,7 @@ const RegisterScreen = () => {
 
       <TextInput
         placeholder="Sobrenome"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={surname}
         onChangeText={setSurname}
         style={styles.input}
@@ -60,7 +60,7 @@ const RegisterScreen = () => {
 
       <TextInput
         placeholder="Email"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={email}
         onChangeText={setEmail}
         style={styles.input}
@@ -70,7 +70,7 @@ const RegisterScreen = () => {
 
       <TextInput
         placeholder="Senha"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={password}
         onChangeText={setPassword}
         style={styles.input}
@@ -79,7 +79,7 @@ const RegisterScreen = () => {
 
       <TextInput
         placeholder="Faixa de Renda"
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={colors.textLight}
         value={incomeRange}
         onChangeText={setIncomeRange}
         style={styles.input}
@@ -108,15 +108,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSizes.large,
-    color: colors.textPrimary,
+    color: colors.textLight,
     textAlign: 'center',
     marginBottom: spacing.large,
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.textPrimary,
+    borderBottomColor: colors.textLight,
     marginBottom: spacing.medium,
     height: 40,
-    color: colors.textPrimary,
+    color: colors.textLight,
   },
 });

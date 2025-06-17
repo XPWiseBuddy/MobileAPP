@@ -11,6 +11,7 @@ import ChatScreen from './pages/ChatScreen';
 import HistoryScreen from './pages/History';
 import ProfileScreen from './pages/ProfileScreen';
 import SuitabilityScreen from './pages/Suitability';
+import EditProfile from './pages/EditProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -59,6 +60,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Main" component={MainTabs} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

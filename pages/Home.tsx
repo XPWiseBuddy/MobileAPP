@@ -1,11 +1,53 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { colors } from '../theme'; // Supondo que você tenha um objeto colors no theme.ts
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Bem-vindo à tela Início!</Text>
+      <Text style={styles.title}>Bem-vindo à WiseBuddy!</Text>
+      <Text style={styles.text}>**User Name**</Text>
+      <Text style={styles.subtitle}>Perfil do investidor: Moderado</Text>
+      <Text style={[styles.subtitle, { color: colors.textLight, marginBottom: 30 }]}>
+        Utilize as opções abaixo para navegar pelo app.
+      </Text>
+
+      {/* Painel de opções */}
+      <View style={styles.panel}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('Chat')}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name="chat" size={40} color={colors.primary} />
+          </View>
+          <Text style={styles.cardText}>Conversar com o Assistente</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('Suitability')}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name="assignment" size={40} color={colors.primary} />
+          </View>
+          <Text style={styles.cardText}>Refazer Suitability</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('History')}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name="insights" size={40} color={colors.primary} />
+          </View>
+          <Text style={styles.cardText}>Ver Última Recomendação</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -13,24 +55,33 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#0D0D0D', // Fundo escuro
+    backgroundColor: colors.background,
   },
   text: {
-    color: '#F2F2F2',
+    color: colors.text,
     fontSize: 18,
+    marginBottom: 8,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    marginTop: 48,
     marginBottom: 10,
-    color: '#F2F2F2', // Branco
+    color: colors.text,
+    letterSpacing: 1,
+    textShadowColor: '#00000033',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
   },
   subtitle: {
     fontSize: 16,
-    marginBottom: 20,
-    color: '#353B3B', // Cinza escuro
+    marginBottom: 8,
+    color: colors.secondary,
+    textAlign: 'center',
   },
   panel: {
     width: '90%',
@@ -40,25 +91,40 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '45%',
-    aspectRatio: 1, // Faz o card ser quadrado
+    aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#353B3B', // Fundo do card
+    marginVertical: 14,
+    borderRadius: 24,
+    backgroundColor: colors.secondary,
+    // Neumorphism effect
     shadowColor: '#000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 5,
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 8,
+    // Light shadow
+    borderWidth: 1,
+    borderColor: '#2E323A',
   },
-  cardIcon: {
+  iconWrapper: {
+    backgroundColor: colors.secondary,
+    borderRadius: 16,
+    padding: 12,
     marginBottom: 10,
+    // Neumorphism inner shadow
+    shadowColor: '#ffffff30',
+    shadowOffset: { width: -4, height: -4 },
+    shadowOpacity: 0.7,
+    shadowRadius: 8,
+    elevation: 2,
   },
   cardText: {
-    fontSize: 14,
-    color: '#F2F2F2', // Branco
+    fontSize: 15,
+    color: colors.text,
     textAlign: 'center',
     fontWeight: '600',
+    letterSpacing: 0.5,
+    marginTop: 4,
   },
 });
