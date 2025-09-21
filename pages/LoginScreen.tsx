@@ -31,12 +31,17 @@ const LoginScreen = () => {
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
         const userName = response.data.name;
         const userEmail = response.data.email;
+        const userId = response.data.id?.toString() || response.data.userId?.toString();
         console.log({
           'User Name:': userName,
           'User Email:': userEmail,
+          'User ID:': userId,
         });
         await AsyncStorage.setItem('userName', userName);
         await AsyncStorage.setItem('userEmail', userEmail);
+        if (userId) {
+          await AsyncStorage.setItem('userId', userId);
+        }
         // Armazena sessão do usuário no banco pela API
         await axios.post(`${BASE_URL}/wise-buddy/v1/sessions`, {
           userName: userName,
