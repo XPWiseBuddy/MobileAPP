@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Modal, Pressable, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation, CommonActions, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, spacing, fontSizes } from '../theme';
 import EditProfile from './EditProfile';
@@ -26,34 +26,39 @@ export default function ProfileScreen() {
 
 
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userId = await AsyncStorage.getItem('userId');
-        if (!userId) {
-          navigation.replace('Login');
-          return;
-        }
-
-        const response = await fetch(`${BASE_URL}/wise-buddy/v1/users/${userId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data);
-        } else {
-          navigation.replace('Login');
-        }
-      } catch (error) {
-        console.error('Erro ao buscar dados do usuário:', error);
-      } finally {
-        setLoading(false);
+  const fetchUserData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        navigation.navigate('Login' as never);
+        return;
       }
-    };
 
-    fetchUserData();
-  }, []);
+      const response = await fetch(`${BASE_URL}/wise-buddy/v1/users/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+        console.log('Dados do usuário atualizados:', data);
+      } else {
+        navigation.navigate('Login' as never);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados do usuário:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [BASE_URL, navigation]);
+
+  // Carrega os dados sempre que a tela ganhar foco
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [fetchUserData])
+  );
 
   const handleEditProfile = () => {
-    navigation.navigate('EditProfile', { user });
+    navigation.navigate('EditProfile' as never);
   };
 
   const handleLogout = async () => {

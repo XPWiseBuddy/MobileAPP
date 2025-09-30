@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 type HistoryItem = {
   json: string;
@@ -16,32 +16,40 @@ export default function HistoryScreen() {
   const BASE_URL =
     Platform.OS === 'android' ? 'http://10.0.2.2:8085' : 'http://localhost:8085';
 
-  useEffect(() => {
-    async function fetchHistory() {
-      try {
-        const userId = await AsyncStorage.getItem('userId');
-        if (!userId){
-          setError('Usuário não encontrado');
-          navigation.navigate('Login' as never);
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/wise-buddy/v1/suitabilities/history/${userId}`);
-        const data = await response.json();
-        console.log(`Response data: ${JSON.stringify(data)}`);
-        if (response.status !== 200) {
-          setError(data.message || 'Erro ao buscar histórico');
-          return;
-        }
-        setHistory(data);
-        console.log(`History data: ${JSON.stringify(history)}`);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchHistory = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setHistory([]); // Limpa o histórico anterior
+    
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId){
+        setError('Usuário não encontrado');
+        navigation.navigate('Login' as never);
+        return;
       }
+      const response = await fetch(`${BASE_URL}/wise-buddy/v1/suitabilities/history/${userId}`);
+      const data = await response.json();
+      console.log(`Response data: ${JSON.stringify(data)}`);
+      if (response.status !== 200) {
+        setError(data.message || 'Erro ao buscar histórico');
+        return;
+      }
+      setHistory(data);
+      console.log(`History data: ${JSON.stringify(data)}`);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    fetchHistory();
-  }, [navigation]);
+  }, [navigation, BASE_URL]);
+
+  // Carrega os dados sempre que a tela ganhar foco
+  useFocusEffect(
+    useCallback(() => {
+      fetchHistory();
+    }, [fetchHistory])
+  );
 
   if (loading) {
     return (

@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 import { colors } from '../theme'; // Supondo que você tenha um objeto colors no theme.ts
 
 export default function HomeScreen({ navigation }: any) {
+  const [userName, setUserName] = useState<string>('');
+
+  // Carregar nome do usuário do AsyncStorage
+  const loadUserName = useCallback(async () => {
+    try {
+      const storedUserName = await AsyncStorage.getItem('userName');
+      if (storedUserName) {
+        setUserName(storedUserName);
+      } else {
+        setUserName('Usuário'); // Fallback caso não tenha nome
+      }
+    } catch (error) {
+      console.error('Erro ao carregar nome do usuário:', error);
+      setUserName('Usuário'); // Fallback em caso de erro
+    }
+  }, []);
+
+  // Carrega o nome sempre que a tela ganhar foco
+  useFocusEffect(
+    useCallback(() => {
+      loadUserName();
+    }, [loadUserName])
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bem-vindo à WiseBuddy!</Text>
-      <Text style={styles.text}>**User Name**</Text>
+      <Text style={styles.text}>{userName}</Text>
       <Text style={styles.subtitle}>Perfil do investidor: Moderado</Text>
       <Text style={[styles.subtitle, { color: colors.textLight, marginBottom: 30 }]}>
         Utilize as opções abaixo para navegar pelo app.
