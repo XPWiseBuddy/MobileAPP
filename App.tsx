@@ -12,6 +12,8 @@ import HistoryScreen from './pages/History';
 import ProfileScreen from './pages/ProfileScreen';
 import SuitabilityScreen from './pages/Suitability';
 import EditProfile from './pages/EditProfile';
+import SubscriptionScreen from './pages/SubscriptionScreen';
+import PaymentScreen from './pages/PaymentScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,7 +24,7 @@ function MainTabs() {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName;
+          let iconName: keyof typeof Ionicons.glyphMap;
 
           if (route.name === 'Home') {
             iconName = 'home-outline';
@@ -34,6 +36,8 @@ function MainTabs() {
             iconName = 'person-outline';
           } else if (route.name === 'Suitability') {
             iconName = 'checkmark-circle-outline';
+          } else {
+            iconName = 'ellipse-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -61,6 +65,8 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Main" component={MainTabs} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+        <Stack.Screen name="Payment" component={PaymentScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

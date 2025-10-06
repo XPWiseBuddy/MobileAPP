@@ -73,6 +73,17 @@ export default function HomeScreen({ navigation }: any) {
           </View>
           <Text style={styles.cardText}>Ver Última Recomendação</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.85}
+          onPress={() => navigation.navigate('Subscription')}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name="star" size={40} color={colors.primary} />
+          </View>
+          <Text style={styles.cardText}>Planos Premium</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
